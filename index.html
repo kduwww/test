@@ -1,78 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Atlas Menu</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { margin: 0; font-family: Arial, sans-serif; background: #111; color: #fff; }
-        header { display: flex; align-items: center; padding: 10px; background: #222; }
-        header img { height: 50px; margin-right: 10px; }
-        nav { display: flex; flex-direction: column; width: 200px; background: #1a1a1a; padding: 10px; }
-        nav button { display: flex; align-items: center; margin: 5px 0; padding: 10px; background: #333; border: none; color: #fff; cursor: pointer; }
-        nav button i { margin-right: 10px; }
-        nav button.active { background: #555; }
-        main { margin-left: 220px; padding: 20px; }
-        footer { position: absolute; bottom: 0; width: 100%; padding: 10px; background: #222; text-align: center; }
-    </style>
+<meta charset="UTF-8">
+<title>Atlas Menu</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #111; color: #fff; }
+    header { display: flex; align-items: center; padding: 10px; background: #222; }
+    header img { height: 50px; margin-right: 10px; }
+    nav { display: flex; flex-direction: column; width: 200px; background: #1a1a1a; padding: 10px; }
+    nav button { display: flex; align-items: center; margin: 5px 0; padding: 10px; background: #333; border: none; color: #fff; cursor: pointer; }
+    nav button i { margin-right: 10px; }
+    nav button.active { background: #555; }
+    main { margin-left: 220px; padding: 20px; }
+    footer { position: absolute; bottom: 0; width: 100%; padding: 10px; background: #222; text-align: center; }
+</style>
 </head>
 <body>
-    <header>
-        <img src="https://via.placeholder.com/50" alt="Homer Simpson waving">
-        <h1>Atlas</h1>
-    </header>
+<header>
+    <img src="https://via.placeholder.com/50" alt="Homer Simpson waving">
+    <h1>Atlas</h1>
+</header>
 
-    <nav id="menu">
-        <button class="active" data-tab="Self"><i class="fa fa-user"></i> Self</button>
-        <button data-tab="Online"><i class="fa fa-computer"></i> Online</button>
-        <button data-tab="Combat/Weapons"><i class="fa fa-crosshairs"></i> Combat/Weapons</button>
-        <button data-tab="Visual"><i class="fa fa-eye"></i> Visual</button>
-        <button data-tab="Vehicle"><i class="fa fa-car"></i> Vehicle</button>
-        <button data-tab="Miscellaneous"><i class="fa fa-folder"></i> Miscellaneous</button>
-        <button data-tab="Destructive"><i class="fa fa-bomb"></i> Destructive</button>
-        <button data-tab="Triggers"><i class="fa fa-bolt"></i> Triggers</button>
-        <button data-tab="Settings"><i class="fa fa-gear"></i> Settings</button>
-    </nav>
+<nav id="menu">
+    <button class="active" data-tab="Self"><i class="fa fa-user"></i> Self</button>
+    <button data-tab="Online"><i class="fa fa-computer"></i> Online</button>
+    <button data-tab="Combat/Weapons"><i class="fa fa-crosshairs"></i> Combat/Weapons</button>
+    <button data-tab="Visual"><i class="fa fa-eye"></i> Visual</button>
+    <button data-tab="Vehicle"><i class="fa fa-car"></i> Vehicle</button>
+    <button data-tab="Miscellaneous"><i class="fa fa-folder"></i> Miscellaneous</button>
+    <button data-tab="Destructive"><i class="fa fa-bomb"></i> Destructive</button>
+    <button data-tab="Triggers"><i class="fa fa-bolt"></i> Triggers</button>
+    <button data-tab="Settings"><i class="fa fa-gear"></i> Settings</button>
+</nav>
 
-    <main>
-        <h2 id="tab-title">Self</h2>
-        <div id="tab-content">
-            <p>Welcome to the Self menu!</p>
-        </div>
-    </main>
+<main>
+    <h2 id="tab-title">Self</h2>
+    <div id="tab-content">
+        <p>Welcome to the Self menu!</p>
+    </div>
+</main>
 
-    <footer>
-        Version: Beta | Updated: 24hrs ago | Created by: 0oox | Page 1/9
-    </footer>
+<footer>
+    Version: Beta | Updated: 24hrs ago | Created by: 0oox | Page 1/9
+</footer>
 
-    <script>
-        const buttons = document.querySelectorAll('nav button');
-        const title = document.getElementById('tab-title');
-        const content = document.getElementById('tab-content');
+<script>
+const buttons = document.querySelectorAll('nav button');
+const title = document.getElementById('tab-title');
+const content = document.getElementById('tab-content');
 
-        buttons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelector('button.active').classList.remove('active');
-                btn.classList.add('active');
-                title.textContent = btn.dataset.tab;
-                content.innerHTML = `<p>You selected ${btn.dataset.tab} menu!</p>`;
-                
-                // Send message to Lua via Macho DUI
-                if (window.sendMessageToLua) {
-                    window.sendMessageToLua(JSON.stringify({action: "tab_selected", tab: btn.dataset.tab}));
-                }
-            });
-        });
+buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelector('button.active').classList.remove('active');
+        btn.classList.add('active');
+        title.textContent = btn.dataset.tab;
+        content.innerHTML = `<p>You selected ${btn.dataset.tab} menu!</p>`;
+        
+        // Send message to Lua
+        if(window.sendMessageToLua) {
+            window.sendMessageToLua(JSON.stringify({ action: "tab_selected", tab: btn.dataset.tab }));
+        }
+    });
+});
 
-        // Example handler to receive messages from Lua
-        window.addEventListener("message", (event) => {
-            console.log("Message from Lua:", event.data);
-        });
-
-        // For MachoExecuteDuiScript demo
-        window.sendMessageToLua = (msg) => {
-            fetch("https://dummyurl.example", { method: "POST", body: msg }); // placeholder
-        };
-    </script>
+// Listen for messages from Lua
+window.addEventListener("message", (event) => {
+    const data = event.data;
+    if(data.action === "update_content") {
+        title.textContent = data.tab || "Unknown";
+        content.innerHTML = data.content || "<p>No content provided</p>";
+    }
+});
+</script>
 </body>
 </html>
